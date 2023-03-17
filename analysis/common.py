@@ -35,12 +35,12 @@ def compute_success_rates(runs, budget=1e6, sortby=None):
         k = tasks.index(key)
         percent = 100 * (np.array(values[:episodes]) >= 1).mean()
         percents[i, j, k] = percent
-  if isinstance(sortby, (str, int)):
-    if isinstance(sortby, str):
-      sortby = methods.index(sortby)
-    order = np.argsort(-np.nanmean(percents[sortby], 0), -1)
-    percents = percents[:, :, order]
-    tasks = np.array(tasks)[order].tolist()
+  # if isinstance(sortby, (str, int)):
+  #   if isinstance(sortby, str):
+  #     sortby = methods.index(sortby)
+  #   order = np.argsort(-np.nanmean(percents[sortby], 0), -1)
+  #   percents = percents[:, :, order]
+  #   tasks = np.array(tasks)[order].tolist()
   return percents, methods, seeds, tasks
 
 

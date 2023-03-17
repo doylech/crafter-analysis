@@ -82,25 +82,42 @@ def print_summary(runs, budget, verbose):
 
 
 read_stats(
-    'logdir/crafter_reward-dreamerv2',
-    'scores', 'crafter_reward', 'dreamerv2')
+    '/home/cd/remote-download/crafter_collect_20230314/cr-per-key',
+    '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+    'crafter_reward',
+    'cr-per-key-1M',
+    budget=int(1000000))
+
+# read_stats(
+#     '/home/cd/remote-download/crafter_collect_20230312/cr',
+#     '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+#     'crafter_reward',
+#     'cr-300k',
+#     budget=int(300000))
 
 read_stats(
-    'logdir/crafter_reward-ppo',
-    'scores', 'crafter_reward', 'ppo')
-
-read_stats(
-    'logdir/crafter_reward-rainbow',
-    'scores', 'crafter_reward', 'rainbow')
-
-read_stats(
-    'logdir/crafter_noreward-unsup_plan2explore',
-    'scores', 'crafter_noreward', 'unsup_plan2explore')
-
-read_stats(
-    'logdir/crafter_noreward-unsup_rnd',
-    'scores', 'crafter_noreward', 'unsup_rnd')
-
-read_stats(
-    'logdir/crafter_noreward-random',
-    'scores', 'crafter_noreward', 'random')
+    '/home/cd/remote-download/crafter_collect_20230313/dv3',
+    '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+    'crafter_reward',
+    'dv3-baseline-1M',
+    budget=int(1000000))
+#
+# read_stats(
+#     'logdir/crafter_reward-ppo',
+#     'scores', 'crafter_reward', 'ppo')
+#
+# read_stats(
+#     'logdir/crafter_reward-rainbow',
+#     'scores', 'crafter_reward', 'rainbow')
+#
+# read_stats(
+#     'logdir/crafter_noreward-unsup_plan2explore',
+#     'scores', 'crafter_noreward', 'unsup_plan2explore')
+#
+# read_stats(
+#     'logdir/crafter_noreward-unsup_rnd',
+#     'scores', 'crafter_noreward', 'unsup_rnd')
+#
+# read_stats(
+#     'logdir/crafter_noreward-random',
+#     'scores', 'crafter_noreward', 'random')
