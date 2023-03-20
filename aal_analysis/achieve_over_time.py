@@ -7,10 +7,10 @@ from matplotlib import pyplot as plt
 
 
 def run():
-    sliding_window = 50000
+    sliding_window = 20000
     max_episodes = 10000
     budget = 1000000
-    threshold_level = 0.2
+    threshold_level = 0.1
 
     groups = {
         'dv3': [
@@ -80,63 +80,63 @@ def run():
     """
 
 
-    # groups = {
-    #     'dv2_crafter_U': [
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-59_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-58_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-57_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-60_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-82_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-81_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-80_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-79_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-78_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-77_train_env0.jsonl',
-    #     ],
-    #     # 'dv2_crafter_D': [
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-300_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-299_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-298_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-297_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-294_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-293_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-292_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-291_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-466_train_env0.jsonl',
-    #     #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-465_train_env0.jsonl',
-    #     # ],
-    #     'dv2_crafter_g08_a07_losses': [
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-423_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-422_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-421_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-420_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-419_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-418_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-417_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-416_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-464_train_env0.jsonl',
-    #         '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-463_train_env0.jsonl',
-    #     ],
-    #     'dv3': [
-    #         f'/home/cd/remote-download/crafter_collect_20230313/dv3/a100-01/crafter-dv3-20230312-071153/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-02/crafter-dv3-20230312-071202/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-03/crafter-dv3-20230312-071207/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-04/crafter-dv3-20230312-071213/stats.jsonl'
-    #     ],
-    #     'cr-per-key': [
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-01/crafter-dv3-20230309-234939/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-02/crafter-dv3-20230310-001122/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-03/crafter-dv3-20230310-001124/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-04/crafter-dv3-20230310-001127/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-05/crafter-dv3-20230313-043140/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-06/crafter-dv3-20230313-043143/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-07/crafter-dv3-20230313-043144/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-08/crafter-dv3-20230313-043145/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-09/crafter-dv3-20230313-043146/stats.jsonl',
-    #         '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-10/crafter-dv3-20230313-043148/stats.jsonl',
-    #     ]
-    #
-    # }
+    groups = {
+        'dv2_crafter_U': [
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-59_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-58_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-57_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-60_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-82_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-81_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-80_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-79_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-78_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-77_train_env0.jsonl',
+        ],
+        # 'dv2_crafter_D': [
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-300_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-299_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-298_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-297_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-294_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-293_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-292_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-291_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-466_train_env0.jsonl',
+        #     '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-465_train_env0.jsonl',
+        # ],
+        'dv2_crafter_g08_a07_losses': [
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-423_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-422_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-421_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-420_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-419_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-418_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-417_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-416_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-464_train_env0.jsonl',
+            '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-463_train_env0.jsonl',
+        ],
+        'dv3': [
+            f'/home/cd/remote-download/crafter_collect_20230313/dv3/a100-01/crafter-dv3-20230312-071153/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-02/crafter-dv3-20230312-071202/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-03/crafter-dv3-20230312-071207/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-04/crafter-dv3-20230312-071213/stats.jsonl'
+        ],
+        'dv3-cr-per-seq': [
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-01/crafter-dv3-20230309-234939/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-02/crafter-dv3-20230310-001122/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-03/crafter-dv3-20230310-001124/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-04/crafter-dv3-20230310-001127/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-05/crafter-dv3-20230313-043140/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-06/crafter-dv3-20230313-043143/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-07/crafter-dv3-20230313-043144/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-08/crafter-dv3-20230313-043145/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-09/crafter-dv3-20230313-043146/stats.jsonl',
+            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-10/crafter-dv3-20230313-043148/stats.jsonl',
+        ]
+
+    }
 
   #   """
   #   all_ids['p2e_crafter_U'] = {
@@ -244,7 +244,12 @@ def run():
             threshold[group].append(threshold_calc(avg_unlocks_over_time, threshold_level))
 
         for key in threshold[group][0]:
-            threshold_avg[group][key] = np.mean([threshold[group][i][key] for i in range(len(threshold[group])) if threshold[group][i][key] > 0])
+            censored = [threshold[group][i][key] for i in range(len(threshold[group])) if threshold[group][i][key] > 0]
+            threshold_avg[group][key] = np.mean(censored)
+            # if 0 < len(censored) < len(threshold[group]):
+            #     print(f'WARNING: {key} has {len(threshold[group]) - len(censored)} missing values', flush=True)
+
+
 
         for d in [('achievement_collect_wood', 'achievement_place_table'),
                   ('achievement_place_table', 'achievement_make_wood_pickaxe'),
@@ -257,96 +262,13 @@ def run():
 
     print(threshold_avg)
 
-    ## ALL ACHIEVEMENTS ##
-
-    # make a multibar plot of threshold_avg, one bar for each achievement, and one color for each group
-    fig, ax = plt.subplots()
-    width = 0.25
-    multiplier = 0
-
-    for group in threshold_avg:
-        x = np.arange(len(list(threshold_avg[group].keys())))
-        offset = width * multiplier
-        ax.bar(x + offset, threshold_avg[group].values(), width, label=group)
-        multiplier += 1
-
-    # make xtick labels vertical
-    ax.set_xticks(x+width/2, [k.split('_', 1)[1] for k in threshold_avg[group].keys()])
-    plt.xticks(rotation=90)
-    plt.legend()
-    plt.title(f'Steps to {threshold_level} achievement rate (avg over 50k steps)')
-    plt.tight_layout()
-    plt.show()
-
-
-    ## DELTA ##
-    fig, ax = plt.subplots()
-    width = 0.1
-    multiplier = 0
-
-    for group in threshold_avg:
-        # calculate deltas
-        # 'place_table - collect_wood'
-        # 'make_wood_pickaxe - place_table'
-        # 'collect_stone - make_wood_pickaxe'
-        filtered = {'place_table -\n collect_wood': threshold_avg[group]['achievement_place_table'] - threshold_avg[group]['achievement_collect_wood'],
-                    'make_wood_pickaxe -\n place_table': threshold_avg[group]['achievement_make_wood_pickaxe'] - threshold_avg[group]['achievement_place_table'],
-                    'collect_stone -\n make_wood_pickaxe': threshold_avg[group]['achievement_collect_stone'] - threshold_avg[group]['achievement_make_wood_pickaxe']}
-        x = np.arange(len(list(filtered.keys())))
-        offset = width * multiplier
-        ax.bar(x + offset, filtered.values(), width, label=group)
-        multiplier += 1
-
-    # make xtick labels vertical
-    ax.set_xticks(x+(len(groups) * width)/2, filtered.keys())
-    #plt.xticks(rotation=90)
-    plt.legend()
-    plt.title(f'Steps to {threshold_level} achievement rate (avg over {sliding_window} steps)')
-    plt.tight_layout()
-    plt.show()
-
-    ## DELTA BY RUN ##
-    fig, ax = plt.subplots()
-    width = 0.1
-    multiplier = 0
-
-    for group in threshold_avg:
-        # calculate deltas
-        # 'place_table - collect_wood'
-        # 'make_wood_pickaxe - place_table'
-        # 'collect_stone - make_wood_pickaxe'
-        filtered = {'place_table -\n collect_wood':
-                        threshold_delta_avg[group][('achievement_collect_wood', 'achievement_place_table')],
-                    'make_wood_pickaxe -\n place_table':
-                        threshold_delta_avg[group][('achievement_place_table', 'achievement_make_wood_pickaxe')],
-                    'collect_stone -\n make_wood_pickaxe':
-                        threshold_delta_avg[group][('achievement_make_wood_pickaxe','achievement_collect_stone')]}
-        x = np.arange(len(list(filtered.keys())))
-        offset = width * multiplier
-        ax.bar(x + offset, filtered.values(), width, label=group)
-        # add error bars
-        ax.errorbar(x + offset, filtered.values(), yerr=list(threshold_delta_std[group].values()), fmt='none', ecolor='black', capsize=5)
-        multiplier += 1
-
-    # make xtick labels vertical
-    ax.set_xticks(x+(len(groups) * width)/2, filtered.keys())
-    #plt.xticks(rotation=90)
-    plt.legend()
-    plt.title(f'Steps to {threshold_level} achievement rate (avg over {sliding_window} steps)')
-    plt.tight_layout()
-    plt.show()
-
-    # plot achievement rate over time for each achievement
-    # plt.figure(figsize=(10, 6))
-    # for g in groups:
-    #     for key in unlock_results:
-    #         if key.startswith('achievement_collect_wood') or key.startswith('achievement_place_table'):
-    #             plt.plot(unlock_results['cumulative_steps'], unlock_results[key], label=key)
-    #             plt.legend()
-    #             plt.show()
-
-    ### GPT 4 attempt 2
-
+    # x = steps_to_threshold_all_achievements(group, threshold_avg, threshold_level)
+    #
+    # filtered, x = step_delta_simple(groups, sliding_window, threshold_avg, threshold_level, x)
+    #
+    # step_delta_to_chained_achievement_thresholds(filtered, groups, sliding_window, threshold_avg, threshold_delta_avg,
+    #                                              threshold_delta_std, threshold_level, x)
+    #
     min_steps = 0
     max_steps = 1000000
     step_interval = 500
@@ -357,11 +279,142 @@ def run():
                          'achievement_collect_stone',
                          'achievement_make_stone_pickaxe',
                          'achievement_collect_iron']
+    #
+    # proportion_of_ep_split_by_achievement(achievements_list, max_steps, min_steps, step_interval, unlock_results)
+    proportion_of_eps_split_by_group(achievements_list, max_steps, min_steps, step_interval, unlock_results)
 
+    # Print out a table of the following achievement chain:
+    chain = ['achievement_collect_wood',
+             'achievement_place_table',
+             'achievement_make_wood_pickaxe',
+             'achievement_collect_stone',
+             'achievement_make_stone_pickaxe',
+             'achievement_collect_iron']
+
+    gs = ['dv2_crafter_U', 'dv2_crafter_g08_a07_losses']
+
+    print(' Steps to 10% achievement threshold')
+    print('| Achievement | dv2_crafter_U | dv2_crafter_g08_a07_losses |')
+    print('| --- | --- | --- |')
+    for achievement in chain:
+        g_vals_str = ''
+        for g in gs:
+            g_vals_str += f' {threshold_avg[g][achievement]:.0f} |'
+
+        print(f'| {achievement} |{g_vals_str}')
+
+    gs = ['dv2_crafter_U', 'dv2_crafter_g08_a07_losses', 'dv3', 'dv3-cr-per-seq']
+
+    print(' Steps to 10% achievement threshold')
+    print('| Achievement | dv2_crafter_U | dv2_crafter_g08_a07_losses | dv3 | dv3-cr-per-seq |')
+    print('| --- | --- | --- |')
+    for achievement in chain:
+        g_vals_str = ''
+        for g in gs:
+            g_vals_str += f' {threshold_avg[g][achievement]:.0f} |'
+
+        print(f'| {achievement} |{g_vals_str}')
+
+    return
+
+
+def steps_to_threshold_all_achievements(group, threshold_avg, threshold_level):
+    ## ALL ACHIEVEMENTS ##
+    # make a multibar plot of threshold_avg, one bar for each achievement, and one color for each group
+    fig, ax = plt.subplots()
+    width = 0.25
+    multiplier = 0
+    for group in threshold_avg:
+        x = np.arange(len(list(threshold_avg[group].keys())))
+        offset = width * multiplier
+        ax.bar(x + offset, threshold_avg[group].values(), width, label=group)
+        multiplier += 1
+    # make xtick labels vertical
+    ax.set_xticks(x + width / 2, [k.split('_', 1)[1] for k in threshold_avg[group].keys()])
+    plt.xticks(rotation=90)
+    plt.legend()
+    plt.title(f'Steps to {threshold_level} achievement rate (avg over 50k steps)')
+    plt.tight_layout()
+    plt.show()
+    return x
+
+
+def step_delta_simple(groups, sliding_window, threshold_avg, threshold_level, x):
+    ## DELTA ##
+    fig, ax = plt.subplots()
+    width = 0.1
+    multiplier = 0
+    for group in threshold_avg:
+        # calculate deltas
+        # 'place_table - collect_wood'
+        # 'make_wood_pickaxe - place_table'
+        # 'collect_stone - make_wood_pickaxe'
+        filtered = {
+            'place_table -\n collect_wood': threshold_avg[group]['achievement_place_table'] - threshold_avg[group][
+                'achievement_collect_wood'],
+            'make_wood_pickaxe -\n place_table': threshold_avg[group]['achievement_make_wood_pickaxe'] -
+                                                 threshold_avg[group]['achievement_place_table'],
+            'collect_stone -\n make_wood_pickaxe': threshold_avg[group]['achievement_collect_stone'] -
+                                                   threshold_avg[group]['achievement_make_wood_pickaxe']}
+        x = np.arange(len(list(filtered.keys())))
+        offset = width * multiplier
+        ax.bar(x + offset, filtered.values(), width, label=group)
+        multiplier += 1
+    # make xtick labels vertical
+    ax.set_xticks(x + (len(groups) * width) / 2, filtered.keys())
+    # plt.xticks(rotation=90)
+    plt.legend()
+    plt.title(f'Steps to {threshold_level} achievement rate (avg over {sliding_window} steps)')
+    plt.tight_layout()
+    plt.show()
+    return filtered, x
+
+
+def step_delta_to_chained_achievement_thresholds(filtered, groups, sliding_window, threshold_avg, threshold_delta_avg,
+                                                 threshold_delta_std, threshold_level, x):
+    ## DELTA BY RUN ##
+    fig, ax = plt.subplots()
+    width = 0.1
+    multiplier = 0
+    for group in threshold_avg:
+        # calculate deltas
+        # 'place_table - collect_wood'
+        # 'make_wood_pickaxe - place_table'
+        # 'collect_stone - make_wood_pickaxe'
+        filtered = {'place_table -\n collect_wood':
+                        threshold_delta_avg[group][('achievement_collect_wood', 'achievement_place_table')],
+                    'make_wood_pickaxe -\n place_table':
+                        threshold_delta_avg[group][('achievement_place_table', 'achievement_make_wood_pickaxe')],
+                    'collect_stone -\n make_wood_pickaxe':
+                        threshold_delta_avg[group][('achievement_make_wood_pickaxe', 'achievement_collect_stone')]}
+        x = np.arange(len(list(filtered.keys())))
+        offset = width * multiplier
+        ax.bar(x + offset, filtered.values(), width, label=group)
+        # add error bars
+        ax.errorbar(x + offset, filtered.values(), yerr=list(threshold_delta_std[group].values()), fmt='none',
+                    ecolor='black', capsize=5)
+        multiplier += 1
+    # make xtick labels vertical
+    ax.set_xticks(x + (len(groups) * width) / 2, filtered.keys())
+    # plt.xticks(rotation=90)
+    plt.legend()
+    plt.title(f'Steps to {threshold_level} achievement rate (avg over {sliding_window} steps)')
+    plt.tight_layout()
+    plt.show()
+    # plot achievement rate over time for each achievement
+    # plt.figure(figsize=(10, 6))
+    # for g in groups:
+    #     for key in unlock_results:
+    #         if key.startswith('achievement_collect_wood') or key.startswith('achievement_place_table'):
+    #             plt.plot(unlock_results['cumulative_steps'], unlock_results[key], label=key)
+    #             plt.legend()
+    #             plt.show()
+
+
+def proportion_of_ep_split_by_achievement(achievements_list, max_steps, min_steps, step_interval, unlock_results):
     # Create a 2x2 grid of subplots
     fig, axs = plt.subplots(1, 4, figsize=(16, 5), sharey=True)
     axs = axs.flatten()
-
     for ax, achievement in zip(axs, achievements_list):
         # Define a common set of cumulative steps
         common_cumulative_steps = np.arange(min_steps, max_steps + 1, step_interval)
@@ -386,7 +439,8 @@ def run():
                 resampled_data = resampled_data.append(run_data, ignore_index=True)
 
         # Create a line plot with a shaded area to illustrate uncertainty for each group
-        sns.lineplot(x='Cumulative Steps', y='Achievement Value', hue='Group', errorbar='sd', data=resampled_data, ax=ax)
+        sns.lineplot(x='Cumulative Steps', y='Achievement Value', hue='Group', errorbar='sd', data=resampled_data,
+                     ax=ax)
 
         # Add labels to the subplot
         ax.set_xlabel('Cumulative Steps')
@@ -394,19 +448,23 @@ def run():
         ax.set_title(f'{achievement} vs. Step')
         ax.grid()
         ax.legend(title='Groups')
-        #ax.set_yscale("log")
-
+        # ax.set_yscale("log")
     # Adjust the layout and show the plot
     plt.tight_layout()
     plt.show()
 
-    ### plot by agent
 
+def proportion_of_eps_split_by_group(achievements_list, max_steps, min_steps, step_interval, unlock_results,
+                                     threshold=0.01):
     # Create a 2x2 grid of subplots
-    fig, axs = plt.subplots(1, 2, figsize=(8, 5), sharey=True)
+    #fig, axs = plt.subplots(1, 2, figsize=(8, 5), sharey=True)
+    fig, axs = plt.subplots(1, 4, figsize=(16, 5), sharey=True)
     axs = axs.flatten()
 
+    step_cross_threshold = {a: {} for a in achievements_list}
+
     for ax, group in zip(axs, unlock_results.keys()):
+
         # Define a common set of cumulative steps
         common_cumulative_steps = np.arange(min_steps, max_steps + 1, step_interval)
 
@@ -429,6 +487,16 @@ def run():
                 resampled_data = resampled_data.append(run_data, ignore_index=True)
                 # no legend
 
+            step_cross_threshold[achievement][group] = np.NaN
+            # find average achievement value at each step
+            for step in common_cumulative_steps:
+                # find the mean of run_data where cumulative_steps == step and achievement == achievement
+                v = resampled_data[(resampled_data['Cumulative Steps'] == step) &
+                                   (resampled_data['Achievement'] == achievement)]['Achievement Value'].mean()
+                if v >= threshold:
+                    step_cross_threshold[achievement][group] = step
+                    break
+
         # Create a line plot with a shaded area to illustrate uncertainty for each group
         sns.lineplot(x='Cumulative Steps', y='Achievement Value', hue='Achievement', errorbar='sd', data=resampled_data,
                      ax=ax)
@@ -439,16 +507,25 @@ def run():
         ax.set_title(f'{group}')
         ax.grid()
         # turn off legend
-        ax.legend().set_visible(False)
-
+        #ax.legend().set_visible(False)
 
         # ax.set_yscale("log")
-
     # Adjust the layout and show the plot
     plt.tight_layout()
     plt.show()
 
-    return
+    print(step_cross_threshold)
+    # print out the dictionary as a markdown table in the same order as achievement_list and group_list
+    groups = list(unlock_results.keys())
+    print(f'| Achievement | {groups[0]} | {groups[1]} | {groups[2]} | {groups[3]} |')
+    print('| ----------- | ------- | ------- | ------- | ------- |')
+    for achievement in achievements_list:
+        print('|', achievement, '| ', end='')
+        for group in unlock_results.keys():
+            print(step_cross_threshold[achievement][group], '| ', end='')
+        print()
+
+
 def moving_average_unlocks(MAX_EPISODES, budget, filename, sliding_window):
     filename = Path(filename)
     data = dict()
@@ -495,6 +572,8 @@ def moving_average_unlocks(MAX_EPISODES, budget, filename, sliding_window):
         # debugging help
         indices.append((start_episode, end_episode, np.sum(data['episode_lengths'][start_episode:end_episode + 1])))
     return results
+
+
 
 
 def threshold_calc(avg_unlocks_over_time, threshold):
