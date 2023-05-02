@@ -72,21 +72,58 @@ def print_summary(runs, budget, verbose):
       runs, budget, sortby=0)
   scores = np.squeeze(common.compute_scores(percents))
   print(f'Score:        {np.mean(scores):10.2f} ± {np.std(scores):.2f}')
+  print([s.round(1) for s in scores])
   print(f'Reward:       {np.mean(rewards):10.2f} ± {np.std(rewards):.2f}')
   print(f'Length:       {np.mean(lengths):10.2f} ± {np.std(lengths):.2f}')
   print(f'Episodes:     {np.mean(episodes):10.2f} ± {np.std(episodes):.2f}')
+  print(f'Runs:         {len(episodes):10.0f}')
   if verbose:
     for task, percent in sorted(tasks, np.squeeze(percents).T):
       name = task[len('achievement_'):].replace('_', ' ').title()
       print(f'{name:<20}  {np.mean(percent):6.2f}%')
 
 
+budget = 1000000
+
+print(f'Analyzing at {budget} steps')
+
+short_budget = f'{budget // 1000}k' if budget < 1e6 else f'{int(budget // 1e6)}M'
+
+# read_stats(
+#     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key',
+#     '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+#     'crafter_reward',
+#     f'cr-per-seq-{short_budget}',
+#     budget=int(budget))
+
 read_stats(
-    '/home/cd/remote-download/crafter_collect_20230314/cr-per-key',
+    '/home/cd/remote-download/crafter_collect_20230321/cr-full',
     '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
     'crafter_reward',
-    'cr-per-key-1M',
-    budget=int(1000000))
+    f'cr-full-{short_budget}',
+    budget=int(budget))
+
+
+read_stats(
+    '/home/cd/remote-download/crafter_collect_20230330_dv3td/td',
+    '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+    'crafter_reward',
+    f'td-full-{short_budget}',
+    budget=int(budget))
+
+read_stats(
+    '/home/cd/remote-download/crafter_countbased_20230424/count-based',
+    '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+    'crafter_reward',
+    f'count-based-{short_budget}',
+    budget=int(budget))
+
+read_stats(
+    '/home/cd/remote-download/crafter_adversarial_20230419/adversarial',
+    '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
+    'crafter_reward',
+    f'adversarial-{short_budget}',
+    budget=int(budget))
 
 # read_stats(
 #     '/home/cd/remote-download/crafter_collect_20230312/cr',
@@ -99,8 +136,8 @@ read_stats(
     '/home/cd/remote-download/crafter_collect_20230313/dv3',
     '/home/cd/remote-download/crafter_collect_20230308/crafter/scores',
     'crafter_reward',
-    'dv3-baseline-1M',
-    budget=int(1000000))
+    f'dv3-baseline-{short_budget}',
+    budget=int(budget))
 #
 # read_stats(
 #     'logdir/crafter_reward-ppo',

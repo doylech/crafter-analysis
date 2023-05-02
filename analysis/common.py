@@ -24,17 +24,101 @@ def compute_success_rates(runs, budget=1e6, sortby=None):
   methods = sorted(set(run['method'] for run in runs))
   seeds = sorted(set(run['seed'] for run in runs))
   tasks = sorted(key for key in runs[0] if key.startswith('achievement_'))
+
+  if sortby == 'depth':
+    """
+    [
+    'achievement_collect_coal', 
+    'achievement_collect_diamond', 
+    'achievement_collect_drink', 
+    'achievement_collect_iron', 
+    'achievement_collect_sapling', 
+    'achievement_collect_stone', 
+    'achievement_collect_wood', 
+    'achievement_defeat_skeleton', 
+    'achievement_defeat_zombie', 
+    'achievement_eat_cow', 
+    'achievement_eat_plant', 
+    'achievement_make_iron_pickaxe', 
+    'achievement_make_iron_sword', 
+    'achievement_make_stone_pickaxe', 
+    'achievement_make_stone_sword', 
+    'achievement_make_wood_pickaxe', 
+    'achievement_make_wood_sword', 
+    'achievement_place_furnace', 
+    'achievement_place_plant', 
+    'achievement_place_stone', 
+    'achievement_place_table', 
+    'achievement_wake_up']
+    
+    to
+    
+      if order_by_difficulty:
+    tasks = ['Wake Up', 'Collect Wood', 'Collect Drink', 'Defeat Zombie', 'Eat Cow', 'Defeat Skeleton',
+             'Collect Sapling',
+             'Place Table', 'Place Plant',
+             'Make Wood Pickaxe', 'Make Wood Sword', 'Eat Plant',
+             'Collect Stone',
+              'Place Stone', 'Collect Coal',
+              'Place Furnace', 'Make Stone Sword', 'Make Stone Pickaxe',
+             'Collect Iron',
+             'Make Iron Pickaxe', 'Make Iron Sword',
+             'Collect Diamond',
+             ]
+    if just_high_difficulty:
+      tasks = ['Make Wood Pickaxe', 'Make Wood Sword', 'Eat Plant',
+             'Collect Stone',
+             'Place Stone', 'Collect Coal',
+             'Place Furnace', 'Make Stone Sword', 'Make Stone Pickaxe',
+             'Collect Iron',
+             'Make Iron Pickaxe', 'Make Iron Sword',
+             'Collect Diamond',
+             ]
+    """
+
+    tasks = [
+      'achievement_wake_up',
+        'achievement_collect_wood',
+        'achievement_collect_drink',
+        'achievement_defeat_zombie',
+        'achievement_eat_cow',
+        'achievement_defeat_skeleton',
+        'achievement_collect_sapling',
+        'achievement_place_table',
+        'achievement_place_plant',
+        'achievement_make_wood_pickaxe',
+        'achievement_make_wood_sword',
+        'achievement_eat_plant',
+        'achievement_collect_stone',
+        'achievement_place_stone',
+        'achievement_collect_coal',
+        'achievement_place_furnace',
+        'achievement_make_stone_sword',
+        'achievement_make_stone_pickaxe',
+        'achievement_collect_iron',
+        'achievement_make_iron_pickaxe',
+        'achievement_make_iron_sword',
+        'achievement_collect_diamond',
+    ]
+
   percents = np.empty((len(methods), len(seeds), len(tasks)))
   percents[:] = np.nan
+  counts = np.empty((len(methods), len(seeds), len(tasks)))
+  counts[:] = np.nan
+  total_episodes = np.empty((len(methods), len(seeds)))
+  total_episodes[:] = np.nan
   for run in runs:
     episodes = (np.array(run['xs']) <= budget).sum()
     i = methods.index(run['method'])
     j = seeds.index(run['seed'])
+    total_episodes[i, j] = episodes
     for key, values in run.items():
       if key in tasks:
         k = tasks.index(key)
         percent = 100 * (np.array(values[:episodes]) >= 1).mean()
         percents[i, j, k] = percent
+        counts[i, j, k] = (np.array(values[:episodes]) >= 1).sum()
+
   # if isinstance(sortby, (str, int)):
   #   if isinstance(sortby, str):
   #     sortby = methods.index(sortby)
