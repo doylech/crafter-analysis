@@ -138,6 +138,15 @@ read_stats(
     'crafter_reward',
     f'dv3-baseline-{short_budget}',
     budget=int(budget))
+
+read_stats(
+    '/home/cd/remote-download/crafter_priority_info_20230508/node1',
+    '/home/cd/remote-download/crafter_priority_info_20230508/node1',
+    'prio_run_crafter_reward',
+    f'dv3-baseline_prio_-{short_budget}',
+    budget=int(budget))
+#
+
 #
 # read_stats(
 #     'logdir/crafter_reward-ppo',

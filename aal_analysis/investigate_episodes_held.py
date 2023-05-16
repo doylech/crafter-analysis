@@ -5,6 +5,8 @@ See download_ckpt.sh to get necessary files from remote server for running this 
 """
 import functools
 import os
+import time
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -41,17 +43,11 @@ def run():
     run_list = ['DRF-416', 'DRF-417', 'DRF-418', 'DRF-419', 'DRF-420', 'DRF-421', 'DRF-422', 'DRF-423',
                 'DRF-463', 'DRF-464']
 
-
-
-    norm_wood_priorities = []
-    norm_wood_pickaxe_priorities = []
-    norm_stone_priorities = []
-    norm_stone_pickaxe_priorities = []
-    norm_coal_priorities = []
-    norm_iron_priorities = []
     avg_full_priorities = np.zeros((len(run_list), run_length))
+    total_resource_priorities = {}
 
     for r, run_name in enumerate(run_list):
+        run_resource_priorities = {}
 
         print(f'Starting {run_name}...')
 
@@ -64,128 +60,81 @@ def run():
         traj_names = os.listdir(traj_dir)
         traj_names.sort()
 
-        get_priority_fn = functools.partial(get_priority, priorities_npz_loaded, priorities_pkl_loaded, run_name)
+        idx_from_file, priorities = reform_priority(priorities_npz_loaded, priorities_pkl_loaded)
+        get_priority_2_fn = functools.partial(get_priority_2, idx_from_file, priorities, run_name)
 
         past_the_end_of_priority_array = False
 
         avg_full_priorities[r, :] = priorities_npz_loaded['arr'][:run_length]
-        mean_priority = priorities_npz_loaded['arr'][:run_length].mean()
 
-        #for episode_num, traj_npz in tqdm(enumerate(traj_names), total=len(traj_names)):
         for episode_num, traj_npz in enumerate(traj_names):
             # Load episodes
             ep, traj_name, traj_timestamp = load_ep(traj_dir, traj_npz)
 
+            start = time.time()
             imgs = ep['image']
-            # has_wood = has_resource('wood', imgs)
-            # has_wood_pickaxe = has_resource('wood_pickaxe', imgs)
-            # has_stone = has_resource('stone', imgs)
+            has_wood = has_resource('wood', imgs)
+            has_wood_pickaxe = has_resource('wood_pickaxe', imgs)
+            has_stone = has_resource('stone', imgs)
             has_stone_pickaxe = has_resource('stone_pickaxe', imgs)
             # has_coal = has_resource('coal', imgs)
             has_iron = has_resource('iron', imgs)
-            has_wood_sword = has_resource('wood_sword', imgs)
+            # has_wood_sword = has_resource('wood_sword', imgs)
             has_stone_sword = has_resource('stone_sword', imgs)
             has_iron_sword = has_resource('iron_sword', imgs)
+            end = time.time()
+            #print(f'has_resource in {end-start} seconds')
 
-            #if has_wood_sword.sum() > 0:
-                #print(f'Found wood sword in {traj_name}')
+            has_resource_dict = {
+                'wood': has_wood,
+                'wood_pickaxe': has_wood_pickaxe,
+                'stone': has_stone,
+                'stone_pickaxe': has_stone_pickaxe,
+                'iron': has_iron,
+                'stone_sword': has_stone_sword,
+                'iron_sword': has_iron_sword,
+            }
+
+            has_resource_indices = {resource: np.where(has_resource_dict[resource])[0] for resource in has_resource_dict}
+
             if has_stone_sword.sum() > 0:
                 print(f'Found stone sword in {traj_name}')
             if has_iron_sword.sum() > 0:
                 print(f'Found iron sword in {traj_name}')
 
-
-
-            # has_wood_pickaxe_indicies = np.where(has_wood_pickaxe == 1)[0]
-
-            # if has_stone_pickaxe.sum() == 0:
-            #     continue
-            #
-            # plt.imshow(ep['image'][-1])
-            # plt.axis('off')
-            # plt.show()
-            # # altered image 59,8
-            # # display ep['image'][-1] but replace the [59,8] pixel with red
-            # alter = np.copy(ep['image'][-1])
-            # alter[59, 15] = [255, 0, 0]
-            # plt.imshow(alter)
-            # plt.axis('off')
-            # plt.show()
-            # break
-
-            def get_acquisition_indices(has_resource_array):
-                # identify indices where the current index is 1 and the previous index is 0
-                return np.where((has_resource_array[:-1] == 0) & (has_resource_array[1:] == 1))[0] + 1
-
-            # wood_acquisition_indices = get_acquisition_indices(has_wood)
-            # wood_pickaxe_acquisition_indices = get_acquisition_indices(has_wood_pickaxe)
-            # stone_acquisition_indices = get_acquisition_indices(has_stone)
-            stone_pickaxe_acquisition_indices = get_acquisition_indices(has_stone_pickaxe)
-            # coal_acquisition_indices = get_acquisition_indices(has_coal)
-            iron_acquisition_indices = get_acquisition_indices(has_iron)
-
-            # print(f'{traj_npz} in {group}:{run_name} has iron acquisition on {iron_acquisition_indices}')
-
-
-            for resource_acquisition_index, norm_priorities in [
-                # (wood_acquisition_indices, norm_wood_priorities),
-                # (wood_pickaxe_acquisition_indices, norm_wood_pickaxe_priorities),
-                # (stone_acquisition_indices, norm_stone_priorities),
-                (stone_pickaxe_acquisition_indices, norm_stone_pickaxe_priorities),
-                # (coal_acquisition_indices, norm_coal_priorities),
-                (iron_acquisition_indices, norm_iron_priorities)
-                # (wood_acquisition_indices, norm_wood_priorities),
-                # (has_wood_pickaxe_indicies, norm_wood_pickaxe_priorities),
-                # (stone_acquisition_indices, norm_stone_priorities),
-                # (stone_pickaxe_acquisition_indices, norm_stone_pickaxe_priorities),
-                # (coal_acquisition_indices, norm_coal_priorities),
-                # (iron_acquisition_indices, norm_iron_priorities)
-            ]:
-                for idx in resource_acquisition_index:
-                    priority = get_priority_fn(traj_npz, idx - 1)
-                    if priority is None:
-                        past_the_end_of_priority_array = True
-                        break
-                    #iron_priorities.append(priority)
-                    norm_priorities.append(priority / mean_priority)
-
-                if past_the_end_of_priority_array:
-                    print(f'Past the end of priority array at episode {episode_num}')
+            for resource, resource_index in has_resource_indices.items():
+                prios = get_priority_2_fn(traj_npz, resource_index)
+                if prios is None:
+                    past_the_end_of_priority_array = True
                     break
+
+                if resource not in run_resource_priorities.keys():
+                    run_resource_priorities[resource] = []
+
+                run_resource_priorities[resource].append(prios)
 
             if past_the_end_of_priority_array:
                 print(f'Past the end of priority array at episode {episode_num}')
                 break
 
-            # plt.imshow(ep['image'][-1])
-            # plt.axis('off')
-            # plt.show()
+        for resource, run_priorities in run_resource_priorities.items():
+            if resource not in total_resource_priorities:
+                total_resource_priorities[resource] = []
+            scaled_run_priorities = (np.mean(np.concatenate(run_priorities)) /
+                                     np.mean(avg_full_priorities[r, :]))
+            total_resource_priorities[resource].append(scaled_run_priorities)
 
-    # Find stats on iron priorities
-    # print('---')
-    # print(f'Number of iron acquisition steps: {len(iron_priorities)}')
-    # print(f'Mean: {np.mean(iron_priorities)}')
-    # print(f'Median: {np.median(iron_priorities)}')
-    # print(f'Min: {np.min(iron_priorities)}')
-    # print(f'Max: {np.max(iron_priorities)}')
-    # print(f'Std: {np.std(iron_priorities)}')
-
-    for resource, norm_priorities in [
-        # ('wood', norm_wood_priorities),
-        # ('wood_pickaxe', norm_wood_pickaxe_priorities),
-        # ('stone', norm_stone_priorities),
-        ('stone_pickaxe', norm_stone_pickaxe_priorities),
-        # ('coal', norm_coal_priorities),
-        ('iron', norm_iron_priorities),
-    ]:
-    # for resource, norm_priorities in [('iron', norm_iron_priorities)]:
+    for r, p in total_resource_priorities.items():
         print(f'---')
-        print(f'Number of {resource} acquisition steps: {len(norm_priorities)}')
-        print(f'Mean: {np.mean(norm_priorities)}')
-        print(f'Median: {np.median(norm_priorities)}')
-        print(f'Min: {np.min(norm_priorities)}')
-        print(f'Max: {np.max(norm_priorities)}')
-        print(f'Std: {np.std(norm_priorities)}')
+        if len(p) == 0:
+            continue
+        print(f'Number of {r} steps: {len(p)}')
+        print(f'Mean: {np.nanmean(p)}')
+        print(f'Median: {np.nanmedian(p)}')
+        print(f'Min: {np.nanmin(p)}')
+        print(f'Max: {np.nanmax(p)}')
+        print(f'Std: {np.nanstd(p)}')
+        print(f'Count non-NaN: {np.count_nonzero(~np.isnan(p))}')
 
     print(' ')
 
@@ -285,6 +234,42 @@ def get_priority(priority_npz_loaded, priority_pkl_loaded, run_name, episode_nam
 
     return priority_npz_loaded['arr'][idx]
 
+
+def reform_priority(priorities_npz_loaded, priority_pkl_loaded):
+    keys = list(priority_pkl_loaded['idx_from_ep'].keys())
+    values = priorities_npz_loaded['arr']
+
+    split_keys = [x.split(':') for x in keys]
+    split_keys = [[x[0], int(x[1])] for x in split_keys]
+    # zip
+    split_file, split_step = list(zip(*split_keys))
+
+    # create dictionary of index where each file starts
+    idx_from_file = {}
+    for i, file in enumerate(split_file):
+        if file not in idx_from_file:
+            idx_from_file[file] = i
+
+    priorities = np.array(values)
+
+    return idx_from_file, priorities
+
+
+def get_priority_2(idx_from_file, priorities, run_name, episode_name, indices):
+    prefix = f'/home/ikauvar/logs/{run_name}/train_episodes'
+
+    try:
+        offset = idx_from_file[f'{prefix}/{episode_name}']
+    except KeyError:
+        print(f'Could not find {episode_name} in priority pkl')
+        return None
+
+    try:
+        result = priorities[offset + indices - 1]
+    except IndexError:
+        print(f'Could not find {episode_name}:{indices} in priority pkl')
+        return None
+    return result
 
 def get_avg_episode_priority(priority_npz_loaded, priority_pkl_loaded, run_name, episode_name, episode_length):
     prefix = f'/home/ikauvar/logs/{run_name}/train_episodes'

@@ -10,7 +10,7 @@ def run():
     sliding_window = 20000
     max_episodes = 10000
     budget = 1000000
-    threshold_level = 0.1
+    threshold_level = 0.01
 
     groups = {
         'dv3': [
@@ -30,7 +30,15 @@ def run():
             '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-08/crafter-dv3-20230313-043145/stats.jsonl',
             '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-09/crafter-dv3-20230313-043146/stats.jsonl',
             '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-10/crafter-dv3-20230313-043148/stats.jsonl',
-        ]}
+        ],
+        'cr-full': [
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123329/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123335/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123340/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123345/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123354/stats.jsonl',
+        ],
+    }
 
     """
       all_ids['dv2_crafter_U'] = {
@@ -123,18 +131,25 @@ def run():
             '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-03/crafter-dv3-20230312-071207/stats.jsonl',
             '/home/cd/remote-download/crafter_collect_20230313/dv3/a100-04/crafter-dv3-20230312-071213/stats.jsonl'
         ],
-        'dv3-cr-per-seq': [
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-01/crafter-dv3-20230309-234939/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-02/crafter-dv3-20230310-001122/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-03/crafter-dv3-20230310-001124/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-04/crafter-dv3-20230310-001127/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-05/crafter-dv3-20230313-043140/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-06/crafter-dv3-20230313-043143/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-07/crafter-dv3-20230313-043144/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-08/crafter-dv3-20230313-043145/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-09/crafter-dv3-20230313-043146/stats.jsonl',
-            '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-10/crafter-dv3-20230313-043148/stats.jsonl',
-        ]
+        # 'dv3-cr-per-seq': [
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-01/crafter-dv3-20230309-234939/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-02/crafter-dv3-20230310-001122/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-03/crafter-dv3-20230310-001124/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-04/crafter-dv3-20230310-001127/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-05/crafter-dv3-20230313-043140/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-06/crafter-dv3-20230313-043143/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-07/crafter-dv3-20230313-043144/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-08/crafter-dv3-20230313-043145/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-09/crafter-dv3-20230313-043146/stats.jsonl',
+        #     '/home/cd/remote-download/crafter_collect_20230314/cr-per-key/a100-10/crafter-dv3-20230313-043148/stats.jsonl',
+        # ],
+        'cr-full': [
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123329/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123335/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123340/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123345/stats.jsonl',
+            '/home/cd/remote-download/crafter_priority_info_20230508/node1/crafter-dv3-20230503-123354/stats.jsonl',
+        ],
 
     }
 
@@ -220,9 +235,6 @@ def run():
   #           '/home/cd/remote-download/icml2023crafter/crafter_stats/stats/stats_DRF-485_train_env0.jsonl',
   #       ],}
 
-
-
-
     unlock_results = {}
     threshold = {}
     threshold_avg = {}
@@ -248,8 +260,6 @@ def run():
             threshold_avg[group][key] = np.mean(censored)
             # if 0 < len(censored) < len(threshold[group]):
             #     print(f'WARNING: {key} has {len(threshold[group]) - len(censored)} missing values', flush=True)
-
-
 
         for d in [('achievement_collect_wood', 'achievement_place_table'),
                   ('achievement_place_table', 'achievement_make_wood_pickaxe'),
@@ -293,7 +303,7 @@ def run():
 
     gs = ['dv2_crafter_U', 'dv2_crafter_g08_a07_losses']
 
-    print(' Steps to 10% achievement threshold')
+    print(' Steps to 1% achievement threshold')
     print('| Achievement | dv2_crafter_U | dv2_crafter_g08_a07_losses |')
     print('| --- | --- | --- |')
     for achievement in chain:
@@ -303,10 +313,10 @@ def run():
 
         print(f'| {achievement} |{g_vals_str}')
 
-    gs = ['dv2_crafter_U', 'dv2_crafter_g08_a07_losses', 'dv3', 'dv3-cr-per-seq']
+    gs = ['dv2_crafter_U', 'dv2_crafter_g08_a07_losses', 'dv3', 'cr-full']
 
-    print(' Steps to 10% achievement threshold')
-    print('| Achievement | dv2_crafter_U | dv2_crafter_g08_a07_losses | dv3 | dv3-cr-per-seq |')
+    print(' Steps to 1% achievement threshold')
+    print('| Achievement | dv2_crafter_U | dv2_crafter_g08_a07_losses | dv3 | cr-full |')
     print('| --- | --- | --- |')
     for achievement in chain:
         g_vals_str = ''
